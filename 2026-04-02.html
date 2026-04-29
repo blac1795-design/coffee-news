@@ -135,6 +135,51 @@
   .d-change { font-size: 10px; font-weight: 700; margin-top: 3px; }
   .up { color: #5dade2; } .down { color: #ec7063; }
 
+  /* ── RECOMMENDED CAFE ── */
+  .rec-cafe {
+    margin: 0 40px 32px;
+  }
+  .rec-cafe .sec-header {
+    background: linear-gradient(90deg, #6d3b8a, #9b59b6);
+  }
+  .rec-cafe-body {
+    background: #fff; border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.07); overflow: hidden;
+  }
+  .rec-cafe-inner {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 0; align-items: stretch;
+  }
+  .cafe-visual {
+    background: linear-gradient(160deg, #6d3b8a, #9b59b6);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 28px 20px; gap: 10px; min-height: 200px;
+  }
+  .cafe-emoji { font-size: 52px; }
+  .cafe-badge {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 4px 10px; border-radius: 20px; text-transform: uppercase;
+  }
+  .cafe-info { padding: 24px 24px 20px; }
+  .cafe-name { font-size: 20px; font-weight: 900; color: #2c1a0e; margin-bottom: 3px; }
+  .cafe-location {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; color: #888; margin-bottom: 14px;
+  }
+  .cafe-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .cafe-tag {
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; background: #f3eafc; color: #6d3b8a;
+  }
+  .cafe-desc { font-size: 13px; color: #4a3728; line-height: 1.75; margin-bottom: 14px; }
+  .cafe-insight {
+    background: #f9f2fd; border: 1px solid #d7b8f0; border-radius: 7px;
+    padding: 10px 13px; font-size: 12px; color: #6d3b8a; line-height: 1.6;
+  }
+  .cafe-insight strong { color: #4a1c6a; }
+
   /* ── NEXT ISSUE ── */
   .next-issue {
     margin: 0 40px 28px; background: linear-gradient(135deg, #f5f0eb, #ede0cc);
@@ -200,6 +245,16 @@
     .spotlight-icon-box { height: 100px; font-size: 48px; }
     .spotlight-name { font-size: 16px; }
     .spotlight-insight { grid-column: 1; font-size: 11px; }
+
+    /* 추천 카페 */
+    .rec-cafe { margin: 0 12px 24px; }
+    .rec-cafe-inner { grid-template-columns: 1fr; }
+    .cafe-visual { min-height: 100px; padding: 20px; flex-direction: row; gap: 14px; }
+    .cafe-emoji { font-size: 36px; }
+    .cafe-info { padding: 16px 14px; }
+    .cafe-name { font-size: 17px; }
+    .cafe-desc { font-size: 12px; }
+    .cafe-insight { font-size: 11px; }
 
     /* 데이터 스트립 */
     .data-strip {
@@ -300,6 +355,29 @@
     <div class="sec-question">"이 장비, 내 카페에 맞을까?"</div>
   </div>
   <div class="sec-body">
+
+    <div class="news-item">
+      <div class="n-num">01</div>
+      <div>
+        <span class="n-tag">그라인더 · AI</span>
+        <div class="n-title">AI 자동 보정 그라인더 중가형 출시 — 소형 카페도 품질 평준화</div>
+        <div class="n-body">말코닉, 맥 등 주요 브랜드들이 날씨·온도·습도를 감지해 분쇄도를 자동 보정하는 AI 그라인더를 500~700만원대 중가형으로 출시하기 시작했습니다. 기존 플래그십 모델(1,200만원 이상) 대비 절반 가격으로 동등한 추출 안정성을 제공하며, 1인 운영 카페에서 특히 주목받고 있습니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 1인 운영 구조라면 AI 그라인더 투자가 ROI 높음. 초기 투자비 vs. 인건비 절감으로 3년 손익 시뮬레이션 필요.</div>
+      </div>
+      <div class="importance"><div class="stars">★★★</div><div class="imp-lbl">중요도</div></div>
+    </div>
+
+    <div class="news-item">
+      <div class="n-num">02</div>
+      <div>
+        <span class="n-tag">운영 기술 · POS</span>
+        <div class="n-title">카페 특화 POS + 재고관리 올인원 솔루션 월 3~8만원 구독형 확산</div>
+        <div class="n-body">카페24·포스피드·카카오 포스 등이 주문·결제·재고·정산을 통합 관리하는 카페 특화 솔루션을 구독형으로 출시했습니다. 원두 재고 소진 예측, 메뉴별 원가율 실시간 분석, 피크 타임 주문 패턴 분석 기능이 포함되어 소규모 카페의 데이터 기반 운영을 가능하게 합니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 오픈 초기부터 데이터 기반 운영 습관 구축. POS 선택 시 카페 재고 관리 특화 기능 여부 우선 확인.</div>
+      </div>
+      <div class="importance"><div class="stars">★★☆</div><div class="imp-lbl">중요도</div></div>
+    </div>
+
     <div class="equip-spotlight">
       <div class="spotlight-badge">⭐ Equipment Spotlight</div>
       <div class="spotlight-grid">
@@ -364,6 +442,48 @@
         <div class="insight"><strong>💡 창업 포인트</strong> — 오픈 초기 오픈 기념 구독 패키지 선판매 전략으로 초기 고정 매출 안정화 가능.</div>
       </div>
       <div class="importance"><div class="stars">★★★</div><div class="imp-lbl">중요도</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RECOMMENDED CAFE -->
+<div class="rec-cafe section">
+  <div class="sec-header">
+    <div class="sec-num">04</div>
+    <div class="sec-info">
+      <div class="sec-en">Cafe Pick</div>
+      <h2>🗺️ 이번 호 추천 카페</h2>
+    </div>
+    <div class="sec-question">"이런 카페를 만들고 싶다"</div>
+  </div>
+  <div class="rec-cafe-body">
+    <div class="rec-cafe-inner">
+      <div class="cafe-visual">
+        <div class="cafe-emoji">☕</div>
+        <div class="cafe-badge">Cafe Pick</div>
+      </div>
+      <div class="cafe-info">
+        <div class="cafe-name">어니언 성수</div>
+        <div class="cafe-location">📍 서울 성동구 성수동</div>
+        <div class="cafe-tags">
+          <span class="cafe-tag">로컬 감성</span>
+          <span class="cafe-tag">공간 특화</span>
+          <span class="cafe-tag">복합문화</span>
+          <span class="cafe-tag">스페셜티</span>
+        </div>
+        <div class="cafe-desc">
+          낡은 정미소를 개조한 어니언 성수는 '카페 그 이상의 공간'을 실현한 대표 사례입니다.
+          높은 층고와 노출 콘크리트, 빈티지 가구가 어우러진 인테리어는 SNS 바이럴의 교과서가 되었고,
+          오픈 이후 수년째 주말 대기 행렬이 끊이지 않습니다.
+          스페셜티 원두 기반 에스프레소 메뉴와 직접 구운 소금빵이 시그니처로 자리잡았으며,
+          1층 베이커리와 2층 카페의 분리 동선이 운영 효율을 높인 구조로도 주목받습니다.
+        </div>
+        <div class="cafe-insight">
+          <strong>💡 창업 적용 포인트</strong> — 공간 자체가 마케팅이 되는 '이유 있는 인테리어' 전략.
+          폐건물·구옥 리모델링은 임차료를 낮추면서 독특한 공간감을 만드는 효과적인 방법입니다.
+          시그니처 메뉴(소금빵+스페셜티 커피)의 조합처럼 음료 1 + 푸드 1의 묶음 정체성도 참고할 것.
+        </div>
+      </div>
     </div>
   </div>
 </div>
