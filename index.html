@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>☕ 커피뉴스 아카이브</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: #f5f0eb;
+      color: #2c1a0e;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2c1a0e 0%, #5c3317 60%, #8b4513 100%);
+      padding: 2rem 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      width: 46px;
+      height: 46px;
+      background: rgba(212,169,106,0.2);
+      border: 1px solid rgba(212,169,106,0.5);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .header-text h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .header-text h1 span { color: #d4a96a; }
+
+    .header-text p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    .header-stats {
+      margin-left: auto;
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat-item {
+      text-align: right;
+    }
+
+    .stat-num {
+      font-size: 20px;
+      font-weight: 900;
+      color: #d4a96a;
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 2px;
+    }
+
+    .main {
+      padding: 2rem 0 4rem;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid #c8a882;
+      background: #fff;
+      color: #8b4513;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: #8b4513;
+      color: #fff;
+      border-color: #8b4513;
+    }
+
+    /* ── YEAR SECTION ── */
+    .year-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .year-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8b4513;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid #c8a882;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .year-label::before { content: ''; flex: none; }
+
+    /* ── MONTH SECTION ── */
+    .month-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .month-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #5c3317;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e8ddd3;
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    }
+
+    .card:hover {
+      border-color: #8b4513;
+      box-shadow: 0 4px 16px rgba(139,69,19,0.12);
+      transform: translateY(-2px);
+    }
+
+    .card-week {
+      font-size: 10px;
+      font-weight: 700;
+      color: #8b4513;
+      background: #f5e6d8;
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #2c1a0e;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .card-topics {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .topic-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .tag-coffee   { background: #fde8e6; color: #a93226; }
+    .tag-equip    { background: #d6eaf8; color: #1a5276; }
+    .tag-trend    { background: #d5f5e3; color: #1e8449; }
+
+    .card-meta {
+      font-size: 11px;
+      color: #b0998a;
+    }
+
+    .card-arrow {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      color: #d4a96a;
+      font-size: 14px;
+      opacity: 0.4;
+      transition: opacity 0.15s;
+    }
+
+    .card:hover .card-arrow { opacity: 1; }
+
+    /* ── EMPTY / LOADING / ERROR ── */
+    .loading {
+      text-align: center;
+      padding: 4rem 0;
+      color: #b0998a;
+      font-size: 14px;
+    }
+
+    .loading-dot { display: inline-block; animation: blink 1.2s infinite; }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
+
+    .error-msg {
+      text-align: center;
+      padding: 3rem 0;
+      color: #b0998a;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .empty-msg {
+      background: #fff;
+      border: 2px dashed #c8a882;
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      color: #b0998a;
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    /* ── ABOUT BANNER ── */
+    .about-banner {
+      background: #fff;
+      border: 1px solid #e8ddd3;
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .about-icon { font-size: 28px; flex-shrink: 0; }
+
+    .about-text h3 { font-size: 14px; font-weight: 700; color: #2c1a0e; margin-bottom: 4px; }
+
+    .about-text p { font-size: 12px; color: #8a7060; line-height: 1.6; }
+
+    .about-badge {
+      margin-left: auto;
+      background: #f5e6d8;
+      color: #8b4513;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #2c1a0e;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      padding: 1.5rem 0;
+    }
+
+    footer span { color: #d4a96a; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-icon">☕</div>
+      <div class="header-text">
+        <h1>커피<span>뉴스</span> 아카이브</h1>
+        <p>카페 창업 트랜드 리서치 프로젝트 · 격주 발행</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="total-count">—</div>
+          <div class="stat-lbl">총 발행 호</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container">
+
+    <div class="about-banner">
+      <div class="about-icon">📌</div>
+      <div class="about-text">
+        <h3>커피뉴스 프로젝트</h3>
+        <p>커피 · 설비 · 카페 트랜드를 격주로 모니터링하여 창업 인사이트를 축적합니다.<br>3가지 섹션: ☕ 커피 원두/음료 트랜드 · ⚙️ 장비 스포트라이트 · 🏡 카페 트랜드</p>
+      </div>
+      <div class="about-badge">격주 발행</div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="setFilter('all', this)">전체</button>
+      <button class="filter-btn" onclick="setFilter('2026', this)">2026</button>
+      <button class="filter-btn" onclick="setFilter('2027', this)">2027</button>
+    </div>
+
+    <div id="content">
+      <div class="loading">
+        <span class="loading-dot">●</span>
+        <span class="loading-dot">●</span>
+        <span class="loading-dot">●</span>
+        <p style="margin-top:12px;">뉴스레터 목록 불러오는 중...</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div>☕ <span>커피뉴스</span> · 카페 창업 트랜드 리서치 | 최준호</div>
+</footer>
+
+<script>
+  // ────────────────────────────────────────────
+  // ★ 설정값 — GitHub 레포 정보만 변경하세요
+  const GITHUB_USER = 'blac1795';        // GitHub 사용자명
+  const GITHUB_REPO = 'coffee-news';     // 레포 이름
+  const BRANCH      = 'main';            // 브랜치 이름
+  // ────────────────────────────────────────────
+
+  const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/?ref=${BRANCH}`;
+  const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/`;
+
+  const MONTH_KR = ['','1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+  let allFiles = [];
+  let currentFilter = 'all';
+
+  // 파일명 파싱: 2026-04-w4.html → { year, month, week, name }
+  function parseFilename(name) {
+    const m = name.match(/^(\d{4})-(\d{2})-w(\d+)\.html$/);
+    if (!m) return null;
+    return { year: m[1], month: parseInt(m[2]), week: parseInt(m[3]), name };
+  }
+
+  function setFilter(year, btn) {
+    currentFilter = year;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderContent();
+  }
+
+  function renderContent() {
+    const filtered = currentFilter === 'all'
+      ? allFiles
+      : allFiles.filter(f => f.year === currentFilter);
+
+    document.getElementById('content').innerHTML = renderCards(filtered);
+  }
+
+  function renderCards(files) {
+    if (!files.length) {
+      return `<div class="empty-msg">
+        아직 업로드된 뉴스레터가 없어요.<br>
+        격주마다 새 호가 자동으로 추가됩니다. ☕
+      </div>`;
+    }
+
+    // 연도별 그룹화
+    const byYear = {};
+    files.forEach(f => {
+      if (!byYear[f.year]) byYear[f.year] = {};
+      if (!byYear[f.year][f.month]) byYear[f.year][f.month] = [];
+      byYear[f.year][f.month].push(f);
+    });
+
+    let html = '';
+    Object.keys(byYear).sort((a, b) => b - a).forEach(year => {
+      html += `<div class="year-section"><div class="year-label">${year}년</div>`;
+
+      Object.keys(byYear[year]).sort((a, b) => b - a).forEach(month => {
+        html += `<div class="month-section">
+          <div class="month-label">${MONTH_KR[month]}</div>
+          <div class="card-grid">`;
+
+        byYear[year][month].sort((a, b) => b.week - a.week).forEach(f => {
+          const issueNum = getIssueNum(f, files);
+          html += `
+            <a class="card" href="${f.name}">
+              <div class="card-week">${year}년 ${MONTH_KR[month]} ${f.week}주차</div>
+              <div class="card-title">커피뉴스<br>#${issueNum} · ${year}.${String(month).padStart(2,'0')}</div>
+              <div class="card-topics">
+                <span class="topic-tag tag-coffee">☕ 커피</span>
+                <span class="topic-tag tag-equip">⚙️ 장비</span>
+                <span class="topic-tag tag-trend">🏡 트랜드</span>
+              </div>
+              <div class="card-meta">${year}.${String(month).padStart(2,'0')}.${getWeekDay(year, month, f.week)} 발행</div>
+              <div class="card-arrow">→</div>
+            </a>`;
+        });
+
+        html += `</div></div>`;
+      });
+
+      html += `</div>`;
+    });
+
+    return html;
+  }
+
+  // 전체 목록 기준 오름차순 호 번호 계산
+  function getIssueNum(file, allFiles) {
+    const sorted = [...allFiles].sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      if (a.month !== b.month) return a.month - b.month;
+      return a.week - b.week;
+    });
+    return sorted.findIndex(f => f.name === file.name) + 1;
+  }
+
+  // 주차에서 대략적인 날짜 추정
+  function getWeekDay(year, month, week) {
+    const day = Math.min(week * 7 - 3, 28);
+    return String(day).padStart(2, '0');
+  }
+
+  async function loadFiles() {
+    try {
+      const res = await fetch(API_URL, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+
+      if (!res.ok) {
+        // GitHub API 실패 시 로컬 파일 목록으로 폴백
+        throw new Error(`API ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      allFiles = data
+        .map(f => parseFilename(f.name))
+        .filter(Boolean)
+        .sort((a, b) => {
+          if (b.year !== a.year) return b.year - a.year;
+          if (b.month !== a.month) return b.month - a.month;
+          return b.week - a.week;
+        });
+
+      // 총 발행 호 수 업데이트
+      document.getElementById('total-count').textContent = allFiles.length;
+
+      renderContent();
+    } catch (e) {
+      // 로컬 환경에서는 로컬 파일 목록 사용
+      tryLocalFallback();
+    }
+  }
+
+  // 로컬 환경 폴백: 알려진 파일 목록 하드코딩
+  function tryLocalFallback() {
+    // GitHub에 연결 전 로컬 미리보기용
+    const knownFiles = [
+      '2026-04-w4.html',
+    ];
+
+    allFiles = knownFiles
+      .map(n => parseFilename(n))
+      .filter(Boolean);
+
+    document.getElementById('total-count').textContent = allFiles.length;
+
+    if (allFiles.length === 0) {
+      document.getElementById('content').innerHTML =
+        `<div class="error-msg">
+          GitHub 연결 후 뉴스레터 목록이 자동으로 표시됩니다.<br>
+          <small style="margin-top:8px;display:block;color:#c8a882;">
+            설정: GITHUB_USER = '${GITHUB_USER}', GITHUB_REPO = '${GITHUB_REPO}'
+          </small>
+        </div>`;
+      return;
+    }
+
+    renderContent();
+  }
+
+  loadFiles();
+</script>
+
+</body>
+</html>
