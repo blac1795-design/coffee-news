@@ -464,6 +464,80 @@
     background: linear-gradient(90deg, transparent, #c8a882, transparent);
     margin: 0 40px 32px;
   }
+
+  /* ════════════════════════════════
+     📱 모바일 반응형 (640px 이하)
+  ════════════════════════════════ */
+  @media (max-width: 640px) {
+
+    /* 헤더 */
+    .header { padding: 24px 16px 20px; }
+    .header-top { flex-direction: column; gap: 14px; margin-bottom: 14px; }
+    .header h1 { font-size: 30px; }
+    .issue-info .date { font-size: 17px; }
+    .header-subtitle { font-size: 12px; }
+
+    /* 에디터 노트 */
+    .editors-note { margin: 16px 12px; padding: 14px 16px; }
+    .editors-note p { font-size: 13px; }
+
+    /* 이달의 하이라이트 */
+    .highlights { margin: 0 12px 24px; }
+    .highlight-grid { grid-template-columns: 1fr; gap: 10px; }
+    .highlight-card { padding: 16px; }
+    .highlight-card h3 { font-size: 14px; }
+    .highlight-card p { font-size: 12px; }
+
+    /* 카테고리 섹션 */
+    .category-section { margin: 0 12px 28px; }
+    .divider { margin: 0 12px 24px; }
+    .category-header { padding: 12px 16px; gap: 10px; }
+    .category-header .cat-num { font-size: 26px; }
+    .category-header .cat-info h2 { font-size: 17px; }
+    .category-header .cat-question { display: none; }
+
+    /* 뉴스 아이템 */
+    .news-item {
+      grid-template-columns: 1fr 36px;
+      padding: 14px 14px;
+      gap: 10px;
+    }
+    .news-num { display: none; }
+    .news-content h3 { font-size: 14px; }
+    .news-content p { font-size: 12px; }
+    .insight-box { font-size: 11px; padding: 8px 10px; }
+
+    /* 장비 스포트라이트 */
+    .equip-spotlight-wrap { padding: 16px 14px; }
+    .spotlight-grid { grid-template-columns: 1fr; gap: 14px; }
+    .spotlight-icon-box { height: 90px; font-size: 44px; }
+    .spotlight-name { font-size: 16px; }
+    .spotlight-insight { grid-column: 1; font-size: 11px; }
+
+    /* 데이터 스트립 */
+    .data-strip {
+      margin: 0 12px 28px;
+      grid-template-columns: repeat(2, 1fr);
+      padding: 16px 14px;
+      gap: 14px;
+    }
+    .data-item .data-num { font-size: 22px; }
+    .data-item .data-desc { font-size: 10px; }
+
+    /* 다음 달 주목 포인트 */
+    .next-focus { margin: 0 12px 24px; padding: 16px 14px; }
+    .next-focus-items { grid-template-columns: 1fr; gap: 8px; }
+    .nf-item { padding: 10px 12px; }
+
+    /* 푸터 */
+    .footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 16px;
+    }
+    .footer .footer-right { text-align: left; }
+  }
 </style>
 </head>
 <body>
