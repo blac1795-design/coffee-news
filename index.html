@@ -362,7 +362,7 @@
 <script>
   // ────────────────────────────────────────────
   // ★ 설정값 — GitHub 레포 정보만 변경하세요
-  const GITHUB_USER = 'blac1795-design';        // GitHub 사용자명
+  const GITHUB_USER = 'blac1795';        // GitHub 사용자명
   const GITHUB_REPO = 'coffee-news';     // 레포 이름
   const BRANCH      = 'main';            // 브랜치 이름
   // ────────────────────────────────────────────
@@ -375,11 +375,11 @@
   let allFiles = [];
   let currentFilter = 'all';
 
-  // 파일명 파싱: 2026-04-w4.html → { year, month, week, name }
+  // 파일명 파싱: 2026-04-01.html / 2026-04-02.html → { year, month, issue, name }
   function parseFilename(name) {
-    const m = name.match(/^(\d{4})-(\d{2})-w(\d+)\.html$/);
+    const m = name.match(/^(\d{4})-(\d{2})-(0[12])\.html$/);
     if (!m) return null;
-    return { year: m[1], month: parseInt(m[2]), week: parseInt(m[3]), name };
+    return { year: m[1], month: parseInt(m[2]), issue: parseInt(m[3]), name };
   }
 
   function setFilter(year, btn) {
@@ -422,18 +422,19 @@
           <div class="month-label">${MONTH_KR[month]}</div>
           <div class="card-grid">`;
 
-        byYear[year][month].sort((a, b) => b.week - a.week).forEach(f => {
-          const issueNum = getIssueNum(f, files);
+        byYear[year][month].sort((a, b) => b.issue - a.issue).forEach(f => {
+          const issueNum   = getIssueNum(f, files);
+          const issueLabel = f.issue === 1 ? '상반호' : '하반호';
           html += `
             <a class="card" href="${f.name}">
-              <div class="card-week">${year}년 ${MONTH_KR[month]} ${f.week}주차</div>
-              <div class="card-title">커피뉴스<br>#${issueNum} · ${year}.${String(month).padStart(2,'0')}</div>
+              <div class="card-week">${year}년 ${MONTH_KR[month]} ${issueLabel}</div>
+              <div class="card-title">커피뉴스 #${issueNum}<br>${year}.${String(month).padStart(2,'0')} · ${issueLabel}</div>
               <div class="card-topics">
                 <span class="topic-tag tag-coffee">☕ 커피</span>
                 <span class="topic-tag tag-equip">⚙️ 장비</span>
                 <span class="topic-tag tag-trend">🏡 트랜드</span>
               </div>
-              <div class="card-meta">${year}.${String(month).padStart(2,'0')}.${getWeekDay(year, month, f.week)} 발행</div>
+              <div class="card-meta">${f.name.replace('.html', '')}</div>
               <div class="card-arrow">→</div>
             </a>`;
         });
@@ -447,20 +448,14 @@
     return html;
   }
 
-  // 전체 목록 기준 오름차순 호 번호 계산
+  // 전체 목록 기준 오름차순 누적 호 번호 계산
   function getIssueNum(file, allFiles) {
     const sorted = [...allFiles].sort((a, b) => {
-      if (a.year !== b.year) return a.year - b.year;
+      if (a.year  !== b.year)  return a.year  - b.year;
       if (a.month !== b.month) return a.month - b.month;
-      return a.week - b.week;
+      return a.issue - b.issue;
     });
     return sorted.findIndex(f => f.name === file.name) + 1;
-  }
-
-  // 주차에서 대략적인 날짜 추정
-  function getWeekDay(year, month, week) {
-    const day = Math.min(week * 7 - 3, 28);
-    return String(day).padStart(2, '0');
   }
 
   async function loadFiles() {
@@ -469,10 +464,7 @@
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
 
-      if (!res.ok) {
-        // GitHub API 실패 시 로컬 파일 목록으로 폴백
-        throw new Error(`API ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`API ${res.status}`);
 
       const data = await res.json();
 
@@ -480,26 +472,23 @@
         .map(f => parseFilename(f.name))
         .filter(Boolean)
         .sort((a, b) => {
-          if (b.year !== a.year) return b.year - a.year;
+          if (b.year  !== a.year)  return b.year  - a.year;
           if (b.month !== a.month) return b.month - a.month;
-          return b.week - a.week;
+          return b.issue - a.issue;
         });
 
-      // 총 발행 호 수 업데이트
       document.getElementById('total-count').textContent = allFiles.length;
-
       renderContent();
     } catch (e) {
-      // 로컬 환경에서는 로컬 파일 목록 사용
       tryLocalFallback();
     }
   }
 
-  // 로컬 환경 폴백: 알려진 파일 목록 하드코딩
+  // 로컬 환경 폴백: GitHub 연결 전 로컬 미리보기용
   function tryLocalFallback() {
-    // GitHub에 연결 전 로컬 미리보기용
     const knownFiles = [
-      '2026-04-w4.html',
+      '2026-04-01.html',
+      '2026-04-02.html',
     ];
 
     allFiles = knownFiles
