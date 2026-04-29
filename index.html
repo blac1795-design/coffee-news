@@ -362,9 +362,9 @@
 <script>
   // ────────────────────────────────────────────
   // ★ 설정값 — GitHub 레포 정보만 변경하세요
-  const GITHUB_USER = 'blac1795-design';        // GitHub 사용자명
-  const GITHUB_REPO = 'coffee-news';     // 레포 이름
-  const BRANCH      = 'main';            // 브랜치 이름
+  const GITHUB_USER = 'blac1795-design';  // GitHub 사용자명
+  const GITHUB_REPO = 'coffee-news';      // 레포 이름
+  const BRANCH      = 'main';             // 브랜치 이름
   // ────────────────────────────────────────────
 
   const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/?ref=${BRANCH}`;
@@ -458,57 +458,47 @@
     return sorted.findIndex(f => f.name === file.name) + 1;
   }
 
+  // ── 항상 표시할 파일 목록 (새 호 생성 시 여기에 추가) ──────────────
+  const KNOWN_FILES = [
+    '2026-04-01.html',
+    '2026-04-02.html',
+  ];
+  // ────────────────────────────────────────────────────────────────────
+
+  function sortFiles(arr) {
+    return arr.sort((a, b) => {
+      if (b.year  !== a.year)  return b.year  - a.year;
+      if (b.month !== a.month) return b.month - a.month;
+      return b.issue - a.issue;
+    });
+  }
+
   async function loadFiles() {
+    // 먼저 KNOWN_FILES로 즉시 렌더링 → 모바일·로컬 어디서든 카드가 바로 보임
+    allFiles = sortFiles(KNOWN_FILES.map(n => parseFilename(n)).filter(Boolean));
+    document.getElementById('total-count').textContent = allFiles.length;
+    renderContent();
+
+    // 그 다음 GitHub API로 최신 목록 업데이트 시도 (성공하면 덮어쓰기)
     try {
       const res = await fetch(API_URL, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
-
-      if (!res.ok) throw new Error(`API ${res.status}`);
+      if (!res.ok) return; // 실패해도 이미 위에서 렌더링됐으므로 무시
 
       const data = await res.json();
+      const fetched = sortFiles(
+        data.map(f => parseFilename(f.name)).filter(Boolean)
+      );
 
-      allFiles = data
-        .map(f => parseFilename(f.name))
-        .filter(Boolean)
-        .sort((a, b) => {
-          if (b.year  !== a.year)  return b.year  - a.year;
-          if (b.month !== a.month) return b.month - a.month;
-          return b.issue - a.issue;
-        });
-
-      document.getElementById('total-count').textContent = allFiles.length;
-      renderContent();
+      if (fetched.length > 0) {
+        allFiles = fetched;
+        document.getElementById('total-count').textContent = allFiles.length;
+        renderContent();
+      }
     } catch (e) {
-      tryLocalFallback();
+      // GitHub API 실패 — KNOWN_FILES 렌더링 유지
     }
-  }
-
-  // 로컬 환경 폴백: GitHub 연결 전 로컬 미리보기용
-  function tryLocalFallback() {
-    const knownFiles = [
-      '2026-04-01.html',
-      '2026-04-02.html',
-    ];
-
-    allFiles = knownFiles
-      .map(n => parseFilename(n))
-      .filter(Boolean);
-
-    document.getElementById('total-count').textContent = allFiles.length;
-
-    if (allFiles.length === 0) {
-      document.getElementById('content').innerHTML =
-        `<div class="error-msg">
-          GitHub 연결 후 뉴스레터 목록이 자동으로 표시됩니다.<br>
-          <small style="margin-top:8px;display:block;color:#c8a882;">
-            설정: GITHUB_USER = '${GITHUB_USER}', GITHUB_REPO = '${GITHUB_REPO}'
-          </small>
-        </div>`;
-      return;
-    }
-
-    renderContent();
   }
 
   loadFiles();
