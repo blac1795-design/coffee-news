@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☕ 커피뉴스 | 2026년 5월 1주차 (상반호)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; background: #f5f0eb; color: #2c1a0e; }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #2c1a0e 0%, #5c3317 50%, #8b4513 100%);
+    color: #fff; padding: 40px 40px 30px; position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px; background: rgba(255,255,255,0.04); border-radius: 50%;
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .brand { font-size: 11px; font-weight: 300; letter-spacing: 3px; color: #d4a96a; text-transform: uppercase; margin-bottom: 5px; }
+  .header h1 { font-size: 38px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+  .header h1 span { color: #d4a96a; }
+  .issue-badge {
+    background: rgba(212,169,106,0.15); border: 1px solid rgba(212,169,106,0.4);
+    border-radius: 10px; padding: 10px 18px; text-align: right;
+  }
+  .issue-badge .biweekly { font-size: 10px; letter-spacing: 2px; color: #d4a96a; text-transform: uppercase; margin-bottom: 3px; }
+  .issue-badge .week-num { font-size: 20px; font-weight: 800; color: #fff; }
+  .issue-badge .issue-date { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+  .header-sub {
+    font-size: 13px; color: rgba(255,255,255,0.65); font-weight: 300;
+    border-top: 1px solid rgba(255,255,255,0.12); padding-top: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .header-sub .nav-link { font-size: 12px; color: #d4a96a; text-decoration: none; }
+  .header-sub .nav-link:hover { text-decoration: underline; }
+
+  /* ── EDITOR NOTE ── */
+  .editor-note {
+    background: #fff; border-left: 4px solid #8b4513;
+    margin: 24px 40px; padding: 16px 20px; border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .editor-note .label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #8b4513; text-transform: uppercase; margin-bottom: 6px; }
+  .editor-note p { font-size: 13px; line-height: 1.8; color: #4a3728; }
+
+  /* ── SECTION WRAPPER ── */
+  .section { margin: 0 40px 32px; }
+  .sec-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 22px; border-radius: 10px 10px 0 0; color: #fff;
+  }
+  .sec-coffee   .sec-header { background: linear-gradient(90deg, #a93226, #e74c3c); }
+  .sec-equip    .sec-header { background: linear-gradient(90deg, #1a5276, #2980b9); }
+  .sec-trend    .sec-header { background: linear-gradient(90deg, #1e8449, #27ae60); }
+  .sec-num { font-size: 30px; font-weight: 900; opacity: 0.25; line-height: 1; }
+  .sec-info .sec-en { font-size: 10px; letter-spacing: 3px; opacity: 0.75; text-transform: uppercase; }
+  .sec-info h2 { font-size: 20px; font-weight: 800; }
+  .sec-question { margin-left: auto; font-size: 12px; opacity: 0.8; font-style: italic; text-align: right; max-width: 240px; line-height: 1.5; }
+  .sec-body { background: #fff; border-radius: 0 0 10px 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.07); overflow: hidden; }
+
+  /* ── NEWS ITEM ── */
+  .news-item {
+    display: grid; grid-template-columns: 48px 1fr 52px;
+    gap: 14px; align-items: start; padding: 20px 22px;
+    border-bottom: 1px solid #f0e8df; transition: background 0.15s;
+  }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:hover { background: #fdf8f3; }
+  .n-num { font-size: 28px; font-weight: 900; opacity: 0.1; color: #2c1a0e; text-align: center; padding-top: 3px; line-height: 1; }
+  .n-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; padding: 2px 7px; border-radius: 20px; margin-bottom: 5px; text-transform: uppercase;
+  }
+  .sec-coffee .n-tag { background: #fde8e6; color: #a93226; }
+  .sec-equip  .n-tag { background: #d6eaf8; color: #1a5276; }
+  .sec-trend  .n-tag { background: #d5f5e3; color: #1e8449; }
+  .n-title { font-size: 15px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; color: #2c1a0e; }
+  .n-body { font-size: 13px; color: #6b5344; line-height: 1.75; }
+  .insight {
+    background: #fdf3e7; border: 1px solid #e8c99a; border-radius: 7px;
+    padding: 9px 13px; margin-top: 9px; font-size: 12px; color: #7d4e1f; line-height: 1.6;
+  }
+  .insight strong { color: #5c3317; }
+  .importance { display: flex; flex-direction: column; align-items: center; gap: 3px; padding-top: 5px; }
+  .importance .stars { font-size: 13px; letter-spacing: 1px; }
+  .importance .imp-lbl { font-size: 9px; color: #a08060; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; }
+
+  /* ── EQUIPMENT SPOTLIGHT ── */
+  .equip-spotlight {
+    padding: 24px 24px 20px;
+  }
+  .spotlight-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #eaf4fb; color: #1a5276; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; padding: 4px 10px; border-radius: 20px; margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .spotlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .spotlight-left {}
+  .spotlight-icon-box {
+    background: linear-gradient(135deg, #1a5276, #2980b9);
+    border-radius: 14px; height: 140px; display: flex; align-items: center;
+    justify-content: center; font-size: 64px; margin-bottom: 14px;
+  }
+  .spotlight-name { font-size: 18px; font-weight: 800; color: #1a5276; margin-bottom: 4px; }
+  .spotlight-maker { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .spotlight-price {
+    display: inline-block; background: #1a5276; color: #fff;
+    font-size: 14px; font-weight: 700; padding: 5px 14px; border-radius: 8px;
+  }
+  .spotlight-right {}
+  .spotlight-desc { font-size: 13px; color: #4a3728; line-height: 1.75; margin-bottom: 14px; }
+  .spec-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .spec-item { display: flex; gap: 8px; font-size: 12px; color: #555; }
+  .spec-item::before { content: '✓'; color: #2980b9; font-weight: 700; flex-shrink: 0; }
+  .spotlight-insight {
+    background: #eaf4fb; border: 1px solid #aed6f1; border-radius: 7px;
+    padding: 10px 14px; margin-top: 14px; font-size: 12px; color: #1a5276; line-height: 1.6;
+    grid-column: 1 / -1;
+  }
+  .spotlight-insight strong { color: #1a5276; }
+
+  /* ── DATA STRIP ── */
+  .data-strip {
+    background: #2c1a0e; color: #fff; margin: 0 40px 32px;
+    border-radius: 10px; padding: 22px 28px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .d-item { text-align: center; }
+  .d-num { font-size: 26px; font-weight: 900; color: #d4a96a; line-height: 1.1; }
+  .d-desc { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; line-height: 1.5; }
+  .d-change { font-size: 10px; font-weight: 700; margin-top: 3px; }
+  .up { color: #5dade2; } .down { color: #ec7063; }
+
+  /* ── RECOMMENDED CAFE ── */
+  .rec-cafe {
+    margin: 0 40px 32px;
+  }
+  .rec-cafe .sec-header {
+    background: linear-gradient(90deg, #6d3b8a, #9b59b6);
+  }
+  .rec-cafe-body {
+    background: #fff; border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.07); overflow: hidden;
+  }
+  .rec-cafe-inner {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 0; align-items: stretch;
+  }
+  .cafe-visual {
+    background: linear-gradient(160deg, #6d3b8a, #9b59b6);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 28px 20px; gap: 10px; min-height: 200px;
+  }
+  .cafe-emoji { font-size: 52px; }
+  .cafe-badge {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 4px 10px; border-radius: 20px; text-transform: uppercase;
+  }
+  .cafe-info { padding: 24px 24px 20px; }
+  .cafe-name { font-size: 20px; font-weight: 900; color: #2c1a0e; margin-bottom: 3px; }
+  .cafe-location {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; color: #888; margin-bottom: 14px;
+  }
+  .cafe-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .cafe-tag {
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; background: #f3eafc; color: #6d3b8a;
+  }
+  .cafe-desc { font-size: 13px; color: #4a3728; line-height: 1.75; margin-bottom: 14px; }
+  .cafe-insight {
+    background: #f9f2fd; border: 1px solid #d7b8f0; border-radius: 7px;
+    padding: 10px 13px; font-size: 12px; color: #6d3b8a; line-height: 1.6;
+  }
+  .cafe-insight strong { color: #4a1c6a; }
+
+  /* ── NEXT ISSUE ── */
+  .next-issue {
+    margin: 0 40px 28px; background: linear-gradient(135deg, #f5f0eb, #ede0cc);
+    border: 2px dashed #c8a882; border-radius: 10px; padding: 20px 24px;
+  }
+  .next-issue .ni-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #8b4513; text-transform: uppercase; margin-bottom: 12px; }
+  .ni-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ni-item { background: #fff; border-radius: 8px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 8px; }
+  .ni-icon { font-size: 18px; flex-shrink: 0; }
+  .ni-text strong { font-size: 12px; display: block; margin-bottom: 2px; color: #2c1a0e; }
+  .ni-text span { font-size: 11px; color: #7a6555; line-height: 1.4; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #2c1a0e; color: rgba(255,255,255,0.55);
+    padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;
+  }
+  .footer .f-brand { font-size: 15px; font-weight: 700; color: #d4a96a; margin-bottom: 3px; }
+  .footer .f-right { text-align: right; }
+  .footer .f-next { color: #d4a96a; font-weight: 600; margin-bottom: 3px; font-size: 12px; }
+
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, #c8a882, transparent); margin: 0 40px 28px; }
+
+  /* ════════════════════════════════
+     📱 모바일 반응형 (640px 이하)
+  ════════════════════════════════ */
+  @media (max-width: 640px) {
+
+    /* 헤더 */
+    .header { padding: 24px 16px 20px; }
+    .header-top { flex-direction: column; gap: 14px; }
+    .header h1 { font-size: 30px; }
+    .issue-badge { width: 100%; text-align: left; padding: 10px 14px; }
+    .issue-badge .week-num { font-size: 16px; }
+    .header-sub { flex-direction: column; align-items: flex-start; gap: 8px; font-size: 12px; }
+
+    /* 에디터 노트 */
+    .editor-note { margin: 16px 12px; }
+    .editor-note p { font-size: 13px; }
+
+    /* 섹션 */
+    .section { margin: 0 12px 24px; }
+    .divider { margin: 0 12px 20px; }
+    .sec-header { padding: 12px 16px; gap: 8px; }
+    .sec-num { font-size: 22px; }
+    .sec-info h2 { font-size: 17px; }
+    .sec-question { display: none; }
+
+    /* 뉴스 아이템 */
+    .news-item {
+      grid-template-columns: 1fr 36px;
+      padding: 16px 14px;
+      gap: 10px;
+    }
+    .n-num { display: none; }
+    .n-title { font-size: 14px; }
+    .n-body { font-size: 12px; }
+    .insight { font-size: 11px; padding: 8px 10px; }
+
+    /* 장비 스포트라이트 */
+    .equip-spotlight { padding: 16px 14px; }
+    .spotlight-grid { grid-template-columns: 1fr; gap: 16px; }
+    .spotlight-icon-box { height: 100px; font-size: 48px; }
+    .spotlight-name { font-size: 16px; }
+    .spotlight-insight { grid-column: 1; font-size: 11px; }
+
+    /* 추천 카페 */
+    .rec-cafe { margin: 0 12px 24px; }
+    .rec-cafe-inner { grid-template-columns: 1fr; }
+    .cafe-visual { min-height: 100px; padding: 20px; flex-direction: row; gap: 14px; }
+    .cafe-emoji { font-size: 36px; }
+    .cafe-info { padding: 16px 14px; }
+    .cafe-name { font-size: 17px; }
+    .cafe-desc { font-size: 12px; }
+    .cafe-insight { font-size: 11px; }
+
+    /* 데이터 스트립 */
+    .data-strip {
+      margin: 0 12px 24px;
+      grid-template-columns: repeat(2, 1fr);
+      padding: 16px 14px;
+      gap: 14px;
+    }
+    .d-num { font-size: 20px; }
+    .d-desc { font-size: 10px; }
+
+    /* 다음 호 예고 */
+    .next-issue { margin: 0 12px 20px; padding: 16px 14px; }
+    .ni-items { grid-template-columns: 1fr; gap: 8px; }
+
+    /* 푸터 */
+    .footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 16px;
+    }
+    .footer .f-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="brand">☕ Coffee Trends · Biweekly Newsletter</div>
+      <h1>커피<span>뉴스</span></h1>
+    </div>
+    <div class="issue-badge">
+      <div class="biweekly">Biweekly Issue · 상반호</div>
+      <div class="week-num">2026 · 5월 1주차</div>
+      <div class="issue-date">2026.05.01 발행</div>
+    </div>
+  </div>
+  <div class="header-sub">
+    <span>커피 · 장비 스포트라이트 · 카페 트랜드 — 창업 인사이트 격주 리포트</span>
+    <a class="nav-link" href="index.html">← 전체 호 보기</a>
+  </div>
+</div>
+
+<!-- EDITOR NOTE -->
+<div class="editor-note">
+  <div class="label">✍ 이번 호 한 줄 요약</div>
+  <p>브라질 대풍작으로 아라비카 선물가가 하향 안정세로 전환되었지만, 원가 절감분을 메뉴 가격에 반영하기엔 이르다는 시각이 우세합니다. 이번 호 장비 스포트라이트는 소형 카페 공략형 듀얼 보일러 머신 <strong>La Marzocco Linea Micra</strong>이며, 추천 카페는 젠틀몬스터의 아트 디저트 공간 <strong>누데이크(NUDAKE) 성수</strong>입니다.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 1: 커피 -->
+<div class="section sec-coffee">
+  <div class="sec-header">
+    <div class="sec-num">01</div>
+    <div class="sec-info">
+      <div class="sec-en">Coffee</div>
+      <h2>☕ 커피</h2>
+    </div>
+    <div class="sec-question">"어떤 커피가 소비자에게 선택받고 있는가?"</div>
+  </div>
+  <div class="sec-body">
+    <div class="news-item">
+      <div class="n-num">01</div>
+      <div>
+        <span class="n-tag">원두 · 수급</span>
+        <div class="n-title">아라비카 선물가 294센트/파운드로 안정화 — 브라질 대풍작 효과</div>
+        <div class="n-body">2026년 4월 말 기준 아라비카 국제 선물가가 파운드당 약 294센트 수준으로 하향 안정세를 보이고 있습니다. 브라질이 2026/27년 시즌 7,530만 포대를 수확할 전망(전년 대비 +20.8%)이며, 글로벌 공급 잉여분이 약 1,000만 포대에 달할 것으로 예측됩니다. 다만 베트남 생산 회복세에도 불구하고 물류·환율 변수로 국내 원두 도매가 하락 시점은 3분기 이후로 전망됩니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 원두 계약 시점을 하반기로 미루거나 단기 현물 구매를 병행하는 전략 검토. 가격 안정 기조에 맞춰 시그니처 원두의 산지 다변화 시점으로 활용.</div>
+      </div>
+      <div class="importance"><div class="stars">★★★</div><div class="imp-lbl">중요도</div></div>
+    </div>
+    <div class="news-item">
+      <div class="n-num">02</div>
+      <div>
+        <span class="n-tag">소비자 트랜드</span>
+        <div class="n-title">2026 카페 키워드 'B.E.Y.O.N.D' — 커피 한 잔의 경험이 달라진다</div>
+        <div class="n-body">2026 서울카페쇼가 선정한 산업 트렌드 키워드 'B.E.Y.O.N.D'는 Better Community(커뮤니티 허브), Everyday Wellness(건강 음료), Your Moment(개인 맞춤 경험), Original Local(로코노미), Nature Forward(지속가능성)를 포함합니다. 소비자는 이제 카페를 단순히 커피를 마시는 공간이 아닌 취향과 라이프스타일을 표현하는 플랫폼으로 인식하고 있습니다. 논카페인·건강 음료 수요 급증이 이 흐름을 뒷받침합니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 오픈 컨셉 기획 시 'B.E.Y.O.N.D' 키워드 중 1~2개를 핵심 정체성으로 선택. 예: 로컬 산지 원두 × 지역 커뮤니티 이벤트 조합으로 차별화.</div>
+      </div>
+      <div class="importance"><div class="stars">★★☆</div><div class="imp-lbl">중요도</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: 장비 -->
+<div class="section sec-equip">
+  <div class="sec-header">
+    <div class="sec-num">02</div>
+    <div class="sec-info">
+      <div class="sec-en">Equipment</div>
+      <h2>⚙️ 커피 관련 설비</h2>
+    </div>
+    <div class="sec-question">"이 장비, 내 카페에 맞을까?"</div>
+  </div>
+  <div class="sec-body">
+
+    <div class="news-item">
+      <div class="n-num">01</div>
+      <div>
+        <span class="n-tag">무인 · 키오스크</span>
+        <div class="n-title">무인 카페 자동화 시스템 고도화 — 키오스크 + AI 추천 결합형 확산</div>
+        <div class="n-body">2026년 창업 시장에서 무인 카페 운영 시스템이 빠르게 진화하고 있습니다. 기존 단순 키오스크를 넘어 고객 구매 이력 기반 메뉴 추천, 원격 재고 모니터링, 매출 실시간 알림을 통합한 올인원 자동화 솔루션이 월 5~10만원대 구독형으로 제공되고 있습니다. 그러나 실제 무인 카페 수익성은 임차료 통제가 핵심 변수로, 월 순수익 100만원 이하 사례도 다수 보고되어 입지 선정 신중함이 요구됩니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 완전 무인 카페보다 '유인 피크타임 + 무인 비피크타임' 하이브리드 운영이 품질과 효율의 균형점. 자동화 투자 전 최소 6개월 운영 데이터 확보 권장.</div>
+      </div>
+      <div class="importance"><div class="stars">★★☆</div><div class="imp-lbl">중요도</div></div>
+    </div>
+
+    <div class="news-item">
+      <div class="n-num">02</div>
+      <div>
+        <span class="n-tag">머신 · 렌탈</span>
+        <div class="n-title">에스프레소 머신 렌탈·리스 모델 소형 카페로 확산 — 초기비용 40% 절감</div>
+        <div class="n-body">전통적으로 대형 체인에서만 활용되던 에스프레소 머신 렌탈·리스 프로그램이 소형 카페까지 확대되고 있습니다. 월 30~80만원대 구독으로 200~500만원급 머신을 사용할 수 있으며, 유지보수·AS가 포함된 패키지가 인기입니다. 초기 창업 자본이 제한된 1인 카페 창업자에게 특히 유리한 선택지로 부상하고 있으며, 일부 원두 공급사는 정기 구독 계약과 머신 무상 대여를 연계한 상품도 출시했습니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 초기 자본이 부족하다면 렌탈 모델로 시작해 운영 안정화 후 구매 전환 고려. 단, 원두 공급 연계 조건의 계약 기간과 해지 조건을 꼼꼼히 확인할 것.</div>
+      </div>
+      <div class="importance"><div class="stars">★★★</div><div class="imp-lbl">중요도</div></div>
+    </div>
+
+    <!-- SPOTLIGHT -->
+    <div class="equip-spotlight">
+      <div class="spotlight-badge">⭐ Equipment Spotlight</div>
+      <div class="spotlight-grid">
+        <div class="spotlight-left">
+          <div class="spotlight-icon-box">☕</div>
+          <div class="spotlight-name">Linea Micra</div>
+          <div class="spotlight-maker">La Marzocco (라 마르조코) · 이탈리아</div>
+          <div class="spotlight-price">₩ 4,800,000 ~ 5,500,000</div>
+        </div>
+        <div class="spotlight-right">
+          <div class="spotlight-desc">
+            라 마르조코 Linea Micra는 카페 상업용 머신의 기술력을 소형 폼팩터(305×305mm)에 압축한 준상업용 듀얼 보일러 머신입니다.
+            커피 보일러와 스팀 보일러를 독립적으로 운용하여 동시에 에스프레소 추출과 스팀 작업이 가능하며, PID 온도 제어로 추출 일관성이 뛰어납니다.
+            La Marzocco Home 앱과 Wi-Fi로 연동되어 원격 예열 및 레시피 저장이 가능하고, 7가지 컬러 옵션으로 인테리어 포인트로도 활용됩니다.
+            5분 만에 완전 예열되어 영업 준비 부담이 적은 것도 소규모 카페에 실용적입니다.
+          </div>
+          <ul class="spec-list">
+            <li class="spec-item">독립 듀얼 보일러 — 스팀 1.6L + 커피 0.25L</li>
+            <li class="spec-item">PID 정밀 온도 제어 (±0.5°C)</li>
+            <li class="spec-item">Wi-Fi 앱 연동 — 원격 예열·레시피 관리</li>
+            <li class="spec-item">5분 급속 예열 — 소규모 영업 최적</li>
+            <li class="spec-item">7가지 컬러 / 컴팩트 305×305mm 사이즈</li>
+          </ul>
+        </div>
+        <div class="spotlight-insight">
+          <strong>💡 창업 적용 포인트</strong> — Linea Micra는 '보이는 장비가 브랜딩이 되는' 카페에 특히 유리합니다.
+          세련된 디자인으로 SNS 노출 효과가 높고, 상업용 수준의 추출 안정성으로 바리스타 숙련도 편차를 최소화합니다.
+          초기 투자비가 부담된다면 렌탈 프로그램을 통해 월 구독으로도 도입 가능하니, 브랜드 공식 파트너사의 리스 조건을 먼저 확인해보세요.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: 카페 트랜드 -->
+<div class="section sec-trend">
+  <div class="sec-header">
+    <div class="sec-num">03</div>
+    <div class="sec-info">
+      <div class="sec-en">Cafe Trend</div>
+      <h2>🏡 카페 트랜드</h2>
+    </div>
+    <div class="sec-question">"소비자는 카페에서 어떤 경험을 기대하는가?"</div>
+  </div>
+  <div class="sec-body">
+    <div class="news-item">
+      <div class="n-num">01</div>
+      <div>
+        <span class="n-tag">공간 · 브랜딩</span>
+        <div class="n-title">감성 카페 vs 프랜차이즈 — '왜 여기에 오는가'가 생존을 가른다</div>
+        <div class="n-body">2026년 4월 국내 카페 시장 분석에서 프랜차이즈와 경쟁하는 인디 카페의 생존 전략이 재조명되고 있습니다. 가로수길·연남·성수 등 주요 상권에서 신규 오픈한 감성 카페들은 '공간 경험 자체'를 메인 상품으로 내세워 SNS 바이럴을 유도하고 있습니다. 인테리어 투자비(3,000~8,000만원)가 높지만, 첫 6개월 바이럴 효과로 마케팅비를 절감하는 공식이 정착되고 있습니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — '왜 여기에 와야 하는가'에 대한 명확한 답이 없는 카페는 생존이 어렵습니다. 인테리어 투자를 마케팅 비용으로 재정의하고, 방문 이유가 되는 요소를 최소 1개 확보할 것.</div>
+      </div>
+      <div class="importance"><div class="stars">★★★</div><div class="imp-lbl">중요도</div></div>
+    </div>
+    <div class="news-item">
+      <div class="n-num">02</div>
+      <div>
+        <span class="n-tag">공간 비즈니스</span>
+        <div class="n-title">2026 창업자, '공간 비즈니스'로 이동 — 스터디카페·복합 카페 부상</div>
+        <div class="n-body">인력난과 임대 리스크가 커지는 2026년 창업 시장에서 스터디카페·복합 카페 등 공간 기반 비즈니스가 대세로 부상하고 있습니다. 단순 커피 판매를 넘어 좌석 시간제·멤버십·이벤트 수익을 결합한 다층 수익 구조가 주목받고 있습니다. 서울 주요 상권에서 '커피 + 독립서점', '커피 + 원데이 클래스', '커피 + 소품샵' 등 결합형 카페의 폐업률이 단독 카페 대비 현저히 낮은 것으로 나타났습니다.</div>
+        <div class="insight"><strong>💡 창업 포인트</strong> — 부업 수익원을 처음부터 설계하는 것이 리스크 분산의 핵심. 월 임차료의 30% 이상을 커피 외 수익으로 충당할 수 있는 구조 설계 권장.</div>
+      </div>
+      <div class="importance"><div class="stars">★★☆</div><div class="imp-lbl">중요도</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RECOMMENDED CAFE -->
+<div class="rec-cafe section">
+  <div class="sec-header">
+    <div class="sec-num">04</div>
+    <div class="sec-info">
+      <div class="sec-en">Cafe Pick</div>
+      <h2>🗺️ 이번 호 추천 카페</h2>
+    </div>
+    <div class="sec-question">"이런 카페를 만들고 싶다"</div>
+  </div>
+  <div class="rec-cafe-body">
+    <div class="rec-cafe-inner">
+      <div class="cafe-visual">
+        <div class="cafe-emoji">🎨</div>
+        <div class="cafe-badge">Cafe Pick</div>
+      </div>
+      <div class="cafe-info">
+        <div class="cafe-name">누데이크 (NUDAKE) 성수</div>
+        <div class="cafe-location">📍 서울 성동구 성수동</div>
+        <div class="cafe-tags">
+          <span class="cafe-tag">아트뮤지엄</span>
+          <span class="cafe-tag">디저트 특화</span>
+          <span class="cafe-tag">브랜드 공간</span>
+          <span class="cafe-tag">SNS 바이럴</span>
+        </div>
+        <div class="cafe-desc">
+          글로벌 패션 아이웨어 브랜드 젠틀몬스터가 론칭한 디저트 F&B 라인 누데이크(NUDAKE)는 '예술적 디저트를 통한 뉴 판타지 생산'을 슬로건으로 내세운 아트 카페입니다.
+          성수 플래그십은 뮤지엄 컨셉의 공간 연출로 대형 케이크 오브제와 조형물이 가득한 독특한 분위기를 연출하며, 어스름한 조명과 실험적인 음악이 공간 전체를 하나의 작품으로 만듭니다.
+          성수점 한정 시그니처 메뉴인 '버거 케이크'는 햄버거 형태의 케이크로 강렬한 비주얼 덕분에 출시 이후 꾸준히 SNS에서 회자되고 있으며, 방문 이유 자체가 콘텐츠가 되는 카페의 전형을 보여줍니다.
+          커피보다 공간과 디저트가 주인공인 역발상 전략이 오히려 강력한 재방문 유인을 만들어내고 있습니다.
+        </div>
+        <div class="cafe-insight">
+          <strong>💡 창업 적용 포인트</strong> — 음료보다 공간과 시그니처 푸드가 마케팅을 이끄는 구조를 참고하세요.
+          '한정 메뉴 + 독보적 공간'의 조합은 광고비 없이도 SNS 바이럴을 지속시키는 가장 효과적인 방법입니다.
+          소규모 창업이라도 '이 카페에서만 먹을 수 있는 것' 하나를 반드시 기획하세요.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DATA STRIP -->
+<div class="data-strip">
+  <div class="d-item">
+    <div class="d-num">294¢</div>
+    <div class="d-desc">아라비카 선물가<br>파운드당 (4월말 기준)</div>
+    <div class="d-change up">▼ 하향 안정세</div>
+  </div>
+  <div class="d-item">
+    <div class="d-num">+20.8%</div>
+    <div class="d-desc">브라질 원두 생산량<br>2026/27 전망 YoY</div>
+    <div class="d-change up">▲ 공급 확대</div>
+  </div>
+  <div class="d-item">
+    <div class="d-num">1,000만</div>
+    <div class="d-desc">글로벌 커피 공급<br>잉여 예상 포대수</div>
+    <div class="d-change up">▲ 가격 안정 기대</div>
+  </div>
+  <div class="d-item">
+    <div class="d-num">₩30만~</div>
+    <div class="d-desc">에스프레소 머신<br>렌탈 월 구독료</div>
+    <div class="d-change up">▲ 초기비 절감</div>
+  </div>
+</div>
+
+<!-- NEXT ISSUE -->
+<div class="next-issue">
+  <div class="ni-title">📌 다음 호 예고 — 2026년 5월 하반호</div>
+  <div class="ni-items">
+    <div class="ni-item">
+      <div class="ni-icon">🫘</div>
+      <div class="ni-text">
+        <strong>에티오피아 예가체프 동향</strong>
+        <span>2026년 스페셜티 산지별 품질·수급 전망 업데이트</span>
+      </div>
+    </div>
+    <div class="ni-item">
+      <div class="ni-icon">⚙️</div>
+      <div class="ni-text">
+        <strong>장비 스포트라이트</strong>
+        <span>Breville Barista Express Impress — 가성비 올인원 그라인더 내장 머신</span>
+      </div>
+    </div>
+    <div class="ni-item">
+      <div class="ni-icon">📊</div>
+      <div class="ni-text">
+        <strong>구독형 카페 심층 분석</strong>
+        <span>월 구독 멤버십 모델 운영 사례 3곳 비교 및 손익 시뮬레이션</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="f-brand">☕ 커피뉴스</div>
+    <div>카페 창업을 위한 트랜드 리서치 프로젝트 | 2026 © 최준호</div>
+  </div>
+  <div class="f-right">
+    <div class="f-next">다음 호 — 2026년 5월 하반호</div>
+    <div>격주 발행 | 커피 · 장비 스포트라이트 · 카페 트랜드</div>
+  </div>
+</div>
+
+</body>
+</html>
